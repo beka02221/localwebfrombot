@@ -20,6 +20,101 @@
 </head>
 <body>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <script src="script.js"></script>
+
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const box = 20;  // Размер одной ячейки змейки
+        let snake = [{x: 9 * box, y: 10 * box}];  // Начальная позиция змейки
+        let food = {
+            x: Math.floor(Math.random() * 19 + 1) * box,
+            y: Math.floor(Math.random() * 19 + 1) * box
+        };
+        let direction = "";
+        let score = 0;
+
+        // Управление
+        document.addEventListener("keydown", changeDirection);
+
+        function changeDirection(event) {
+            if (event.key === "ArrowLeft" && direction !== "RIGHT") {
+                direction = "LEFT";
+            } else if (event.key === "ArrowUp" && direction !== "DOWN") {
+                direction = "UP";
+            } else if (event.key === "ArrowRight" && direction !== "LEFT") {
+                direction = "RIGHT";
+            } else if (event.key === "ArrowDown" && direction !== "UP") {
+                direction = "DOWN";
+            }
+        }
+
+        // Отрисовка игры
+        function drawGame() {
+            // Очистка поля
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Отрисовка змейки
+            for (let i = 0; i < snake.length; i++) {
+                ctx.fillStyle = (i === 0) ? "green" : "lightgreen";
+                ctx.fillRect(snake[i].x, snake[i].y, box, box);
+                ctx.strokeStyle = "darkgreen";
+                ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+            }
+
+            // Отрисовка еды
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, box, box);
+
+            // Передвижение змейки
+            let snakeX = snake[0].x;
+            let snakeY = snake[0].y;
+
+            if (direction === "LEFT") snakeX -= box;
+            if (direction === "UP") snakeY -= box;
+            if (direction === "RIGHT") snakeX += box;
+            if (direction === "DOWN") snakeY += box;
+
+            // Проверка на "поедание" еды
+            if (snakeX === food.x && snakeY === food.y) {
+                score++;
+                food = {
+                    x: Math.floor(Math.random() * 19 + 1) * box,
+                    y: Math.floor(Math.random() * 19 + 1) * box
+                };
+            } else {
+                snake.pop();  // Удаление хвоста змейки
+            }
+
+            // Добавление новой головы змейки
+            let newHead = {x: snakeX, y: snakeY};
+            
+            // Проверка на столкновение с границей или телом змейки
+            if (snakeX < 0  snakeX >= canvas.width  snakeY < 0  snakeY >= canvas.height  collision(newHead, snake)) {
+                clearInterval(game);
+                alert("Game Over");
+            }
+
+            snake.unshift(newHead);
+
+            // Отрисовка счета
+            ctx.fillStyle = "black";
+            ctx.font = "20px Arial";
+            ctx.fillText("Score: " + score, 10, 20);
+        }
+
+        // Проверка на столкновение змейки с самой собой
+        function collision(head, snake) {
+            for (let i = 0; i < snake.length; i++) {
+                if (head.x === snake[i].x && head.y === snake[i].y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // Игра обновляется каждые 100 миллисекунд
+        let game = setInterval(drawGame, 100);
+    </script>
 </body>
 </html>
